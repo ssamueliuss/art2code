@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art2Code - ASCII Art</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="icon" href="assets/images/icon.png">
+    <style>
+        .char-preview {
+            font-family: monospace;
+            background-color: #f8f9fa;
+            padding: 5px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        #asciiOutput {
+            background-color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        #conversionInfo {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="assets/images/icon.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                Art2Code
+            </a>
+            <div>
+                <a href="index.html" class="btn btn-outline-light me-2">Home</a>
+                <a href="log.html" class="btn btn-outline-light">Log</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <!-- Primera Card: Subir Imagen -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5>Upload an Image</h5>
+            </div>
+            <div class="card-body">
+                <form id="imageForm">
+                    <div class="mb-3">
+                        <label for="imageUrl" class="form-label">Image URL (Experimental)</label>
+                        <input type="url" class="form-control" id="imageUrl" placeholder="https://example.com/imagen.jpg">
+                        <div class="form-text">Use a public URL (JPEG, PNG)</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="imageFile" class="form-label">Or upload an image from your device</label>
+                        <input type="file" class="form-control" id="imageFile" accept="image/*">
+                        <div class="form-text">Upload an image file (JPEG, PNG)</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Segunda Card: Opciones de Conversión -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5>Convert Options</h5>
+            </div>
+            <div class="card-body">
+                <form id="optionsForm">
+                    <div class="mb-3">
+                        <label for="quality" class="form-label"><strong>Convert Quality</strong></label>
+                        <select class="form-select" id="quality">
+                            <option value="high">High (more detailed)</option>
+                            <option value="medium" selected>Medium (balanced)</option>
+                            <option value="low">Low (faster)</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <div id="customQualityContainer" class="mt-2" style="display: none;">
+                            <label for="customQuality" class="form-label">Sample size (pixels between characters)</label>
+                            <input type="number" class="form-control" id="customQuality" min="1" max="20" value="5">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="charSet" class="form-label"><strong>Characters Style</strong></label>
+                        <select class="form-select" id="charSet">
+                            <option value="standard">Standard (@#S%?*+;:.,)</option>
+                            <option value="blocks">Blocs (█▓▒░ )</option>
+                            <option value="detailed">Detailed (@#$%&?*+;:., )</option>
+                            <option value="simple">Simple (#. )</option>
+                            <option value="reverse">Inverse ( .:,;+*?%S#@)</option>
+                        </select>
+                        <div class="char-preview" id="charPreview">Preview: @#S%?*+;:.,</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Color Mode</strong></label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="colorMode" id="blackWhite" value="blackWhite" checked>
+                            <label class="form-check-label" for="blackWhite">Black & White (better for contrast)</label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="invertColors">
+                        <label class="form-check-label" for="invertColors">Invert Colors</label>
+                        <div class="form-text">Useful for dark backgrounds</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+    <button type="button" class="btn btn-primary" id="convertButton">
+        <i class="bi bi-arrow-repeat"></i> Convert to ASCII
+    </button>
+    <button type="button" class="btn btn-outline-secondary" id="downloadTxtButton" disabled>
+        <i class="bi bi-download"></i> Download as Text
+    </button>
+    <button type="button" class="btn btn-outline-secondary" id="downloadImgButton" disabled>
+        <i class="bi bi-image"></i> Download as Image
+    </button>
+</div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tercera Card: Resultados -->
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5>ASCII Result</h5>
+            </div>
+            <div class="card-body">
+                <div id="conversionInfo"></div>
+                <canvas id="asciiCanvas" style="display: none;"></canvas>
+                <pre id="asciiOutput" class="mt-3 mb-0">Your ASCII art will appear here...</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mostrar/ocultar calidad personalizada
+        document.getElementById('quality').addEventListener('change', function() {
+            const customContainer = document.getElementById('customQualityContainer');
+            customContainer.style.display = this.value === 'custom' ? 'block' : 'none';
+        });
+        
+        // Vista previa del conjunto de caracteres
+        const charSets = {
+            standard: ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.'],
+            blocks: ['█', '▓', '▒', '░', ' '],
+            detailed: ['@', '#', '$', '%', '&', '?', '*', '+', ';', ':', ',', '.', ' '],
+            simple: ['#', '.', ' '],
+            reverse: [' ', '.', ',', ':', ';', '+', '*', '?', '%', 'S', '#', '@']
+        };
+        
+        document.getElementById('charSet').addEventListener('change', function() {
+            document.getElementById('charPreview').textContent = 
+                'Vista previa: ' + charSets[this.value].join('');
+        });
+    </script>
+    <script src="assets/js/ascii.js"></script>
+</body>
+
+<footer class="bg-dark text-white text-center py-3 mt-4">
+    <p class="mb-0">&copy; 2025 Art2Code - Samuel Antúnez. All Rights Reserved.</p>
+</footer>
+</html>

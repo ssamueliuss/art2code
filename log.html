@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art2Code - ASCII Art</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles/styles.css">
+    <link rel="icon" href="assets/images/icon.png">
+    <style>
+        .char-preview {
+            font-family: monospace;
+            background-color: #f8f9fa;
+            padding: 5px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        #asciiOutput {
+            background-color: #000000;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        #conversionInfo {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="assets/images/icon.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                Art2Code
+            </a>
+            <div>
+                <a href="index.html" class="btn btn-outline-light me-2">Home</a>
+                <a href="log.html" class="btn btn-outline-light">Log</a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="asciiExamplesCarousel" class="carousel slide mt-5" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <!-- Ejemplo 1 -->
+        <div class="carousel-item active">
+            <img src="assets/images/art1.png" class="d-block w-100" alt="Ejemplo 1">
+            <div class="carousel-caption d-none d-md-block">
+            </div>
+        </div>
+
+        <!-- Ejemplo 2 -->
+        <div class="carousel-item">
+            <img src="assets/images/art2.png" class="d-block w-100" alt="Ejemplo 2">
+            <div class="carousel-caption d-none d-md-block">
+            </div>
+        </div>
+
+        <!-- Ejemplo 3 -->
+        <div class="carousel-item">
+            <img src="assets/images/art3.png" class="d-block w-100" alt="Ejemplo 3">
+            <div class="carousel-caption d-none d-md-block">
+            </div>
+        </div>
+    </div>
+
+    <!-- Controles del carrusel -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#asciiExamplesCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#asciiExamplesCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+</div>
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Update Log</h3>
+    <ul class="timeline">
+        <li>
+            <div class="timeline-badge bg-primary"></div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <h5 class="timeline-title">Version 1.0</h5>
+                    <p><small class="text-muted"><i class="bi bi-clock"></i> May 10, 2025</small></p>
+                </div>
+                <div class="timeline-body">
+                    <p>Added functionality to convert images to ASCII art.</p>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="timeline-badge bg-success"></div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <h5 class="timeline-title">Version 1.1</h5>
+                    <p><small class="text-muted"><i class="bi bi-clock"></i> May 10, 2025</small></p>
+                </div>
+                <div class="timeline-body">
+                    <p>New ASCII art modes and quality management per conversion.</p>
+                    <p>Implemented downloading of ASCII art as text and as images.</p>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="timeline-badge bg-success"></div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <h5 class="timeline-title">Next?</h5>
+                    <p><small class="text-muted"><i class="bi bi-clock"></i> XX XX, XXXX</small></p>
+                </div>
+                <div class="timeline-body">
+                    <p>Wait for more!</p>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mostrar/ocultar calidad personalizada
+        document.getElementById('quality').addEventListener('change', function() {
+            const customContainer = document.getElementById('customQualityContainer');
+            customContainer.style.display = this.value === 'custom' ? 'block' : 'none';
+        });
+        
+        // Vista previa del conjunto de caracteres
+        const charSets = {
+            standard: ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.'],
+            blocks: ['█', '▓', '▒', '░', ' '],
+            detailed: ['@', '#', '$', '%', '&', '?', '*', '+', ';', ':', ',', '.', ' '],
+            simple: ['#', '.', ' '],
+            reverse: [' ', '.', ',', ':', ';', '+', '*', '?', '%', 'S', '#', '@']
+        };
+        
+        document.getElementById('charSet').addEventListener('change', function() {
+            document.getElementById('charPreview').textContent = 
+                'Vista previa: ' + charSets[this.value].join('');
+        });
+    </script>
+    <script src="assets/js/ascii.js"></script>
+</body>
+
+<footer class="bg-dark text-white text-center py-3 mt-4">
+    <p class="mb-0">&copy; 2025 Art2Code - Samuel Antúnez. All Rights Reserved.</p>
+</footer>
+</html>
