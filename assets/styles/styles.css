@@ -1,0 +1,38 @@
+body {
+    background-color: white;
+    color: black;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+/* 
+#asciiOutput {
+    font-size: 15px;
+    color: white;
+    background-color: black;
+    padding: 10px;
+    overflow: auto;
+    white-space: pre;
+    border: 1px solid #ccc;
+    max-height: 800px;
+    font-family: 'Courier New', monospace;
+    line-height: 0.8;  /* Reduce espacio entre líneas */
+
+    #asciiOutput {
+    font-family: 'Courier New', monospace;
+    /* line-height: 0.8; */
+    white-space: pre;
+    font-size: 12px;
+    letter-spacing: 0.5px;  /* Mejor espaciado horizontal */
+    overflow: auto;
+    background: #000;
+    color: #fff;
+    padding: 10px;
+}
+
+#asciiExamplesCarousel .carousel-item img {
+    max-height: 400px;
+    object-fit: contain; /* Ajusta la imagen sin distorsionarla */
+    background-color: #000; /* Fondo negro para las imágenes */
+}
